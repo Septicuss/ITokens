@@ -1,0 +1,9 @@
+name: ITokens
+description: ITokens
+version: 1.0
+main: me.septicuss.ITokens
+
+api-version: 1.17
+
+commands:
+  itoken:
