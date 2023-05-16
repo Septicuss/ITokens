@@ -12,6 +12,8 @@ import org.bukkit.inventory.Inventory;
 
 import fi.septicuss.itokens.manager.ConfigManager;
 import fi.septicuss.itokens.manager.TokenManager;
+import fi.septicuss.itokens.token.ConfigManager;
+import fi.septicuss.itokens.token.TokenManager;
 import fi.septicuss.itokens.utils.MessageUtils;
 
 public class DeathListener implements Listener {

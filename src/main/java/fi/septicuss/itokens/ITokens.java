@@ -14,6 +14,7 @@ import fi.septicuss.itokens.listener.DeathListener;
 import fi.septicuss.itokens.manager.AbstractManager;
 import fi.septicuss.itokens.manager.ConfigManager;
 import fi.septicuss.itokens.manager.TokenManager;
+import fi.septicuss.itokens.token.TokenManager;
 import fi.septicuss.itokens.utils.FileUtils;
 
 public class ITokens extends JavaPlugin {

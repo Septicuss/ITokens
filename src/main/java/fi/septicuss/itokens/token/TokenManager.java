@@ -1,4 +1,4 @@
-package fi.septicuss.itokens.manager;
+package fi.septicuss.itokens.token;
 
 import java.util.List;
 
