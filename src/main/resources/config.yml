@@ -1,18 +1,14 @@
 messages:
   player-saved-notify:
-  - '&aYour items have been kept, because you had %item_name%&a in your inventory!'
-  killer-saved-notify:
-  - '&cThe player killed did not drop any loot, due to having an %item_name%&r on them!'
+  - '&7[i] Your items have been kept, because you had a keep inventory token in your inventory!'
   no-permission:
-  - '&cYou do not have permission to use this command.'
+  - '&c[i] You do not have permission to use this command.'
 item:
-  material: WITHER_ROSE
-  name: '&8&lKeep Inventory Token'
+  material: GOLD_NUGGET
+  name: '#6772a9Keep Inventory Token'
   lore:
-  - '&7Upon having this item in'
-  - '&7your inventory, you will'
-  - '&7keep your inventory'
-  - '&7after your death.'
+  - '&7Keeps your inventory after death.'
+  - '&7Must be inside your inventory.'
   - ' '
-  - '&eThis item has a one-time use.'
+  - '#3a3277Item will be consumed on death.'
   modeldata: 0
