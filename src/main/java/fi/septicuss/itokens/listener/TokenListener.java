@@ -2,28 +2,57 @@ package fi.septicuss.itokens.listener;
 
 import java.util.List;
 
+import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
-import fi.septicuss.itokens.manager.ConfigManager;
-import fi.septicuss.itokens.manager.TokenManager;
-import fi.septicuss.itokens.token.ConfigManager;
 import fi.septicuss.itokens.token.TokenManager;
 import fi.septicuss.itokens.utils.MessageUtils;
 
-public class DeathListener implements Listener {
+public class TokenListener implements Listener {
 
-	private ConfigManager configManager;
+	private FileConfiguration config;
 	private TokenManager tokenManager;
 
-	public DeathListener(final ConfigManager configManager, final TokenManager tokenManager) {
-		this.configManager = configManager;
+	public TokenListener(FileConfiguration config, TokenManager tokenManager) {
+		this.config = config;
 		this.tokenManager = tokenManager;
+	}
+
+	@EventHandler
+	public void onCraft(CraftItemEvent event) {
+		for (ItemStack item : event.getView().getTopInventory().getContents()) {
+			if (tokenManager.isTokenItem(item)) {
+				event.setCancelled(true);
+				event.setResult(Result.DENY);
+				event.getInventory().setResult(new ItemStack(Material.AIR));
+
+				Player player = (Player) event.getWhoClicked();
+				player.updateInventory();
+				return;
+			}
+		}
+	}
+
+	// TODO: Spam clicking anvil result while renaming may still take exp
+	@EventHandler
+	public void onAnvil(PrepareAnvilEvent event) {
+		for (ItemStack item : event.getInventory().getContents()) {
+			if (tokenManager.isTokenItem(item)) {
+				event.setResult(null);
+				return;
+			}
+		}
 	}
 
 	@EventHandler
@@ -74,8 +103,7 @@ public class DeathListener implements Listener {
 	}
 
 	private void message(Player player, String messagePath) {
-
-		final List<String> coloredMessage = MessageUtils.color(configManager.getStringList(messagePath));
+		final List<String> coloredMessage = MessageUtils.color(config.getStringList(messagePath));
 		coloredMessage.forEach(message -> {
 			final String finalMessage = message.replace("%item_name%",
 					tokenManager.getTokenItem().getItemMeta().getDisplayName());

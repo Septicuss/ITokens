@@ -1,7 +1,7 @@
 name: ITokens
 description: ITokens
 version: 1.0
-main: me.septicuss.ITokens
+main: fi.septicuss.itokens.ITokens
 
 api-version: 1.17
 

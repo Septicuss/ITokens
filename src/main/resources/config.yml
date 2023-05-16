@@ -1,0 +1,17 @@
+messages:
+  player-saved-notify:
+  - '&aYour items have been kept, because you had %item_name%&a in your inventory!'
+  killer-saved-notify:
+  - '&cThe player killed did not drop any loot, due to having an %item_name%&r on them!'
+  no-permission:
+  - '&cYou do not have permission to use this command.'
+item:
+  material: WITHER_ROSE
+  name: '&8&lKeep Inventory Token'
+  lore:
+  - '&7Upon having this item in'
+  - '&7your inventory, you will'
+  - '&7keep your inventory'
+  - '&7after your death.'
+  - ' '
+  - '&eThis item has a one-time use.'

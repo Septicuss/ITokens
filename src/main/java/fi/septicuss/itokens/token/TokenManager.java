@@ -2,8 +2,10 @@ package fi.septicuss.itokens.token;
 
 import java.util.List;
 
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -12,55 +14,53 @@ import org.bukkit.persistence.PersistentDataType;
 import fi.septicuss.itokens.ITokens;
 import fi.septicuss.itokens.utils.MessageUtils;
 
-public class TokenManager extends AbstractManager {
+public class TokenManager  {
 
-	private static final String TOKEN_TAG = "itoken_token";
+	private static final NamespacedKey TOKEN_KEY = new NamespacedKey(ITokens.get(), "itoken_token");
 
-	private ConfigManager configManager;
+	private FileConfiguration config;
 	private ItemStack cachedTokenItem;
 
-	public TokenManager(final ConfigManager configManager) {
-		this.configManager = configManager;
+	public TokenManager(FileConfiguration config) {
+		this.config = config;
 	}
+	
 
-	@Override
-	public void reload() {
-
+	public void load() {
 		loadTokenItem();
-
-	}
-
-	@Override
-	public void disable() {
-
-		configManager = null;
-		cachedTokenItem = null;
-
 	}
 
 	private void loadTokenItem() {
-
-		final Material material = configManager.getMaterial("item.material");
-		final String name = MessageUtils.color(configManager.getString("item.name"));
-		final List<String> lore = MessageUtils.color(configManager.getStringList("item.lore"));
-
+		String materialString = config.getString("item.material", "gold_nugget");
+		Material material = Material.GOLD_NUGGET;
+		
+		try {
+			material = Material.valueOf(materialString.toUpperCase());
+		} catch (IllegalArgumentException exception) {
+			ITokens.warn("Unknown material " + materialString + " resorting to default gold nugget");
+			return;
+		}
+		
+		String readableMaterial = WordUtils.capitalizeFully(material.toString().replace("_", " "));
+		String name = MessageUtils.color(config.getString("item.name", readableMaterial));
+		
+		List<String> lore = MessageUtils.color(config.getStringList("item.lore"));
+		int modelData = config.getInt("item.modeldata", 0);
+		
 		ItemStack item = new ItemStack(material);
-		ItemMeta itemMeta = item.getItemMeta();
-
-		itemMeta.setDisplayName(name);
-		itemMeta.setLore(lore);
-
-		final NamespacedKey tokenKey = ITokens.getNamespacedKey(TOKEN_TAG);
-		itemMeta.getPersistentDataContainer().set(tokenKey, PersistentDataType.BYTE, (byte) 1);
-
-		item.setItemMeta(itemMeta);
+		ItemMeta meta = item.getItemMeta();
+		
+		meta.setDisplayName(name);
+		meta.setLore(lore);
+		meta.setCustomModelData(modelData);
+		
+		meta.getPersistentDataContainer().set(TOKEN_KEY, PersistentDataType.BYTE, (byte) 1);
+		item.setItemMeta(meta);
 
 		this.cachedTokenItem = item.clone();
-
 	}
 
 	public boolean isTokenItem(final ItemStack item) {
-
 		if (item == null || item.getType().isAir()) {
 			return false;
 		}
@@ -69,13 +69,11 @@ public class TokenManager extends AbstractManager {
 			return false;
 		}
 
-		final NamespacedKey tokenKey = ITokens.getNamespacedKey(TOKEN_TAG);
-		return item.getItemMeta().getPersistentDataContainer().has(tokenKey, PersistentDataType.BYTE);
-
+		return item.getItemMeta().getPersistentDataContainer().has(TOKEN_KEY, PersistentDataType.BYTE);
 	}
 
 	public void deductTokenItem(final Inventory inventory) {
-
+		System.out.println("deducting");
 		ItemStack token = null;
 
 		for (ItemStack item : inventory.getContents()) {
@@ -90,11 +88,9 @@ public class TokenManager extends AbstractManager {
 		}
 
 		token.setAmount(token.getAmount() - 1);
-
 	}
 
 	public boolean hasTokenItem(final Inventory inventory) {
-
 		for (ItemStack item : inventory.getContents()) {
 			if (isTokenItem(item)) {
 				return true;
@@ -102,13 +98,11 @@ public class TokenManager extends AbstractManager {
 		}
 
 		return false;
-
 	}
 
 	public ItemStack getTokenItem() {
-
+		if (cachedTokenItem == null) return null;
 		return cachedTokenItem.clone();
-
 	}
 
 }
