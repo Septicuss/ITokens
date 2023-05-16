@@ -8,23 +8,19 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import fi.septicuss.itokens.ITokens;
-import fi.septicuss.itokens.token.TokenManager;
 import fi.septicuss.itokens.utils.MessageUtils;
 
 public class ITokenCommand implements CommandExecutor, TabCompleter {
 
 	private static String COMMAND_PERMISSION = "itokens.command";
-	private FileConfiguration config;
-	private TokenManager tokenManager;
+	private ITokens plugin;
 
-	public ITokenCommand(FileConfiguration config, TokenManager tokenManager) {
-		this.config = config;
-		this.tokenManager = tokenManager;
+	public ITokenCommand(ITokens plugin) {
+		this.plugin = plugin;
 	}
 
 	@Override
@@ -109,7 +105,7 @@ public class ITokenCommand implements CommandExecutor, TabCompleter {
 				}
 			}
 
-			final ItemStack tokenItem = tokenManager.getTokenItem();
+			final ItemStack tokenItem = plugin.getTokenManager().getTokenItem();
 			tokenItem.setAmount(amount);
 
 			target.getInventory().addItem(tokenItem);
@@ -131,10 +127,10 @@ public class ITokenCommand implements CommandExecutor, TabCompleter {
 	}
 
 	private void message(CommandSender player, String messagePath) {
-		final List<String> coloredMessage = MessageUtils.color(config.getStringList(messagePath));
+		final List<String> coloredMessage = MessageUtils.color(plugin.getConfig().getStringList(messagePath));
 		coloredMessage.forEach(message -> {
 			final String finalMessage = message.replace("%item_name%",
-					tokenManager.getTokenItem().getItemMeta().getDisplayName());
+					plugin.getTokenManager().getTokenItem().getItemMeta().getDisplayName());
 			player.sendMessage(finalMessage);
 		});
 	}

@@ -14,7 +14,6 @@ import net.md_5.bungee.api.ChatColor;
 public class ITokens extends JavaPlugin {
 
 	private static ITokens instance;
-
 	private TokenManager tokenManager;
 
 	@Override
@@ -25,22 +24,21 @@ public class ITokens extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		reload();
+		getServer().getPluginManager().registerEvents(new TokenListener(this), this);
+		
+		ITokenCommand tokenCommand = new ITokenCommand(this);
+		
+		PluginCommand pluginTokenCommand = getCommand("itoken");
+		pluginTokenCommand.setExecutor(tokenCommand);
+		pluginTokenCommand.setTabCompleter(tokenCommand);
 	}
 
 	public void reload() {
+		saveDefaultConfig();
 		reloadConfig();
 		
 		tokenManager = new TokenManager(getConfig());
 		tokenManager.load();
-
-		getServer().getPluginManager().registerEvents(new TokenListener(getConfig(), tokenManager), this);
-		
-		ITokenCommand tokenCommand = new ITokenCommand(getConfig(), tokenManager);
-
-		PluginCommand pluginTokenCommand = getCommand("itoken");
-		pluginTokenCommand.setExecutor(tokenCommand);
-		pluginTokenCommand.setTabCompleter(tokenCommand);
-		
 	}
 	
 	public static ITokens get() {

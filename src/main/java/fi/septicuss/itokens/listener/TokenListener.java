@@ -3,36 +3,31 @@ package fi.septicuss.itokens.listener;
 import java.util.List;
 
 import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import fi.septicuss.itokens.token.TokenManager;
+import fi.septicuss.itokens.ITokens;
 import fi.septicuss.itokens.utils.MessageUtils;
 
 public class TokenListener implements Listener {
 
-	private FileConfiguration config;
-	private TokenManager tokenManager;
+	private ITokens plugin;
 
-	public TokenListener(FileConfiguration config, TokenManager tokenManager) {
-		this.config = config;
-		this.tokenManager = tokenManager;
+	public TokenListener(ITokens plugin) {
+		this.plugin = plugin;
 	}
 
 	@EventHandler
 	public void onCraft(CraftItemEvent event) {
 		for (ItemStack item : event.getView().getTopInventory().getContents()) {
-			if (tokenManager.isTokenItem(item)) {
+			if (plugin.getTokenManager().isTokenItem(item)) {
 				event.setCancelled(true);
 				event.setResult(Result.DENY);
 				event.getInventory().setResult(new ItemStack(Material.AIR));
@@ -48,7 +43,7 @@ public class TokenListener implements Listener {
 	@EventHandler
 	public void onAnvil(PrepareAnvilEvent event) {
 		for (ItemStack item : event.getInventory().getContents()) {
-			if (tokenManager.isTokenItem(item)) {
+			if (plugin.getTokenManager().isTokenItem(item)) {
 				event.setResult(null);
 				return;
 			}
@@ -57,11 +52,11 @@ public class TokenListener implements Listener {
 
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent event) {
-
+		
 		final Player player = event.getEntity();
 		final Inventory inventory = player.getInventory();
 
-		if (!tokenManager.hasTokenItem(inventory)) {
+		if (!plugin.getTokenManager().hasTokenItem(inventory)) {
 			return;
 		}
 
@@ -71,42 +66,42 @@ public class TokenListener implements Listener {
 		event.getDrops().clear();
 		event.setDroppedExp(0);
 
-		tokenManager.deductTokenItem(inventory);
+		plugin.getTokenManager().deductTokenItem(inventory);
 
 		message(player, "messages.player-saved-notify");
 
 	}
 
-	@EventHandler
-	public void onPlayerDamagePlayer(EntityDamageByEntityEvent event) {
-
-		final Entity damaged = event.getEntity();
-		final Entity damager = event.getDamager();
-
-		if (!(damaged instanceof Player) || !(damager instanceof Player)) {
-			return;
-		}
-
-		final Player damagedPlayer = (Player) damaged;
-		final Player damagerPlayer = (Player) damager;
-
-		if (damagedPlayer.getHealth() - event.getFinalDamage() > 0) {
-			return;
-		}
-
-		if (!tokenManager.hasTokenItem(damagedPlayer.getInventory())) {
-			return;
-		}
-
-		message(damagerPlayer, "messages.killer-saved-notify");
-
-	}
+//	@EventHandler
+//	public void onPlayerDamagePlayer(EntityDamageByEntityEvent event) {
+//
+//		final Entity damaged = event.getEntity();
+//		final Entity damager = event.getDamager();
+//
+//		if (!(damaged instanceof Player) || !(damager instanceof Player)) {
+//			return;
+//		}
+//
+//		final Player damagedPlayer = (Player) damaged;
+//		final Player damagerPlayer = (Player) damager;
+//
+//		if (damagedPlayer.getHealth() - event.getFinalDamage() > 0) {
+//			return;
+//		}
+//
+//		if (!tokenManager.hasTokenItem(damagedPlayer.getInventory())) {
+//			return;
+//		}
+//
+//		message(damagerPlayer, "messages.killer-saved-notify");
+//
+//	}
 
 	private void message(Player player, String messagePath) {
-		final List<String> coloredMessage = MessageUtils.color(config.getStringList(messagePath));
+		final List<String> coloredMessage = MessageUtils.color(plugin.getConfig().getStringList(messagePath));
 		coloredMessage.forEach(message -> {
 			final String finalMessage = message.replace("%item_name%",
-					tokenManager.getTokenItem().getItemMeta().getDisplayName());
+					plugin.getTokenManager().getTokenItem().getItemMeta().getDisplayName());
 			player.sendMessage(finalMessage);
 		});
 

@@ -73,7 +73,6 @@ public class TokenManager  {
 	}
 
 	public void deductTokenItem(final Inventory inventory) {
-		System.out.println("deducting");
 		ItemStack token = null;
 
 		for (ItemStack item : inventory.getContents()) {
