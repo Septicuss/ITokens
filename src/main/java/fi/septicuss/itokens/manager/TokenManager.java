@@ -1,4 +1,4 @@
-package me.septicuss.manager;
+package fi.septicuss.itokens.manager;
 
 import java.util.List;
 
@@ -9,8 +9,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-import me.septicuss.ITokens;
-import me.septicuss.utils.MessageUtils;
+import fi.septicuss.itokens.ITokens;
+import fi.septicuss.itokens.utils.MessageUtils;
 
 public class TokenManager extends AbstractManager {
 

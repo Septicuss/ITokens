@@ -1,4 +1,4 @@
-package me.septicuss.manager;
+package fi.septicuss.itokens.manager;
 
 import java.util.Arrays;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import me.septicuss.utils.FileUtils;
+import fi.septicuss.itokens.utils.FileUtils;
 
 public class ConfigManager extends AbstractManager {
 
@@ -46,6 +46,7 @@ public class ConfigManager extends AbstractManager {
 		config.addDefault("item.material", DEFAULT_MATERIAL.toString());
 		config.addDefault("item.name", "&8&lKeep Inventory Token");
 		config.addDefault("item.lore", Arrays.asList("&7Upon having this item in", "&7your inventory, you will", "&7keep your inventory", "&7after your death.", " ", "&eThis item has a one-time use."));
+		config.addDefault("item.modeldata", 0);
 		
 		fileUtils.saveFileConfiguration(CONFIG_NAME, config);
 		

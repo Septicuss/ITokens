@@ -1,4 +1,4 @@
-package me.septicuss.command;
+package fi.septicuss.itokens.command;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,9 +11,9 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import me.septicuss.manager.ConfigManager;
-import me.septicuss.manager.TokenManager;
-import me.septicuss.utils.MessageUtils;
+import fi.septicuss.itokens.manager.ConfigManager;
+import fi.septicuss.itokens.manager.TokenManager;
+import fi.septicuss.itokens.utils.MessageUtils;
 
 public class ITokenCommand implements CommandExecutor, TabCompleter {
 

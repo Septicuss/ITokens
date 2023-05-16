@@ -1,4 +1,4 @@
-package me.septicuss;
+package fi.septicuss.itokens;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -9,12 +9,12 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import me.septicuss.command.ITokenCommand;
-import me.septicuss.listener.DeathListener;
-import me.septicuss.manager.AbstractManager;
-import me.septicuss.manager.ConfigManager;
-import me.septicuss.manager.TokenManager;
-import me.septicuss.utils.FileUtils;
+import fi.septicuss.itokens.command.ITokenCommand;
+import fi.septicuss.itokens.listener.DeathListener;
+import fi.septicuss.itokens.manager.AbstractManager;
+import fi.septicuss.itokens.manager.ConfigManager;
+import fi.septicuss.itokens.manager.TokenManager;
+import fi.septicuss.itokens.utils.FileUtils;
 
 public class ITokens extends JavaPlugin {
 

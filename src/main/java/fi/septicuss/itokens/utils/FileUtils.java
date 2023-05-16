@@ -1,4 +1,4 @@
-package me.septicuss.utils;
+package fi.septicuss.itokens.utils;
 
 import java.io.File;
 import java.io.IOException;

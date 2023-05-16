@@ -1,4 +1,4 @@
-package me.septicuss.listener;
+package fi.septicuss.itokens.listener;
 
 import java.util.List;
 
@@ -10,9 +10,9 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.Inventory;
 
-import me.septicuss.manager.ConfigManager;
-import me.septicuss.manager.TokenManager;
-import me.septicuss.utils.MessageUtils;
+import fi.septicuss.itokens.manager.ConfigManager;
+import fi.septicuss.itokens.manager.TokenManager;
+import fi.septicuss.itokens.utils.MessageUtils;
 
 public class DeathListener implements Listener {
 

@@ -1,4 +1,4 @@
-package me.septicuss.manager;
+package fi.septicuss.itokens.manager;
 
 public abstract class AbstractManager {
 
